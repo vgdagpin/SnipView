@@ -1,15 +1,44 @@
+using System.Runtime.InteropServices;
+
 namespace SnipView
 {
     public partial class Main : Form
     {
+        [DllImport("user32.dll")]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+        [DllImport("user32.dll")]
+        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
         public Main()
         {
             InitializeComponent();
+
+            /*
+              MOD_ALT: 0x0001
+              MOD_CONTROL: 0x0002
+              MOD_SHIFT: 0x0004
+              MOD_WIN: 0x0008
+            */
+
+            RegisterHotKey(Handle, 1, 12, (int)Keys.Z);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        protected override void WndProc(ref Message m)
         {
-            new SnippingToolForm().Show();
+            if (m.Msg == 0x0312)
+            {
+                if (m.WParam.ToInt32() == 1)
+                {
+                    new SnippingToolForm().Show();
+                }
+            }
+
+            base.WndProc(ref m);
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            UnregisterHotKey(Handle, 1);
         }
     }
 }

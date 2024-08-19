@@ -34,9 +34,15 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Black;
             ClientSize = new Size(321, 160);
+            Cursor = Cursors.Cross;
+            DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.None;
             Name = "SnippingToolForm";
+            Opacity = 0.3D;
             Text = "SnippingToolForm";
+            TopMost = true;
             ResumeLayout(false);
         }
 

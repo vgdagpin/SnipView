@@ -37,6 +37,12 @@
             ClientSize = new Size(234, 114);
             Name = "SnipViewer";
             Text = "SnipViewer";
+            TopMost = true;
+            Load += SnipViewer_Load;
+            KeyDown += SnipViewer_KeyDown;
+            MouseDown += SnipViewer_MouseDown;
+            MouseMove += SnipViewer_MouseMove;
+            MouseUp += SnipViewer_MouseUp;
             ResumeLayout(false);
         }
 

@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace SnipView
+﻿namespace SnipView
 {
     public partial class SnippingToolForm : Form
     {
@@ -20,14 +9,8 @@ namespace SnipView
         public SnippingToolForm()
         {
             InitializeComponent();
-            this.DoubleBuffered = true;
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.WindowState = FormWindowState.Normal; // Change to Normal to set custom bounds
-            this.Bounds = System.Windows.Forms.SystemInformation.VirtualScreen; // Set to cover all screens
-            this.BackColor = Color.White;
-            this.Opacity = 0.5;
-            this.TopMost = true;
-            this.Cursor = Cursors.Cross;
+
+            Bounds = SystemInformation.VirtualScreen;
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -68,7 +51,7 @@ namespace SnipView
         {
             if (isSelecting)
             {
-                using (Pen pen = new Pen(Color.Red, 2))
+                using (Pen pen = new Pen(Color.White, 2))
                 {
                     e.Graphics.DrawRectangle(pen, selectionRectangle);
                 }

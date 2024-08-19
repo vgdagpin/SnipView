@@ -28,32 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
+            notifyIcon1 = new NotifyIcon(components);
             SuspendLayout();
             // 
-            // button1
+            // notifyIcon1
             // 
-            button1.Location = new Point(176, 135);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 0;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
+            notifyIcon1.Text = "SnipView";
+            notifyIcon1.Visible = true;
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(button1);
+            ClientSize = new Size(289, 209);
+            FormBorderStyle = FormBorderStyle.None;
             Name = "Main";
+            ShowIcon = false;
+            ShowInTaskbar = false;
             Text = "Form1";
+            WindowState = FormWindowState.Minimized;
+            FormClosing += Main_FormClosing;
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Button button1;
+        private NotifyIcon notifyIcon1;
     }
 }
