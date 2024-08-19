@@ -69,10 +69,8 @@
 
                     var vwr = new SnipViewer
                     {
-                        FormBorderStyle = FormBorderStyle.None,
                         Size = selectionRectangle.Size,
                         Location = selectionRectangle.Location,
-                        StartPosition = FormStartPosition.Manual,
                         BackgroundImage = (Image)bitmap.Clone()
                     };
 

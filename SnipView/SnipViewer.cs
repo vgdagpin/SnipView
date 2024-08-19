@@ -6,23 +6,48 @@ namespace SnipView
     {
         private bool isDragging = false;
         private Point dragStartPoint = Point.Empty;
+        private bool isDrawing = false;
+        private Point previousPoint = Point.Empty;
+        private Bitmap drawingBitmap = null!;
+        private Graphics drawingGraphics = null!;
+
+        private Stack<Bitmap> undoStack = new Stack<Bitmap>();
 
         public SnipViewer()
         {
-            InitializeComponent();
+            InitializeComponent();          
         }
 
         private void SnipViewer_Load(object sender, EventArgs e)
         {
             ApplyShadow();
+
+            if (BackgroundImage != null)
+            {
+                drawingBitmap = new Bitmap(BackgroundImage);
+                drawingGraphics = Graphics.FromImage(drawingBitmap);
+
+                BackgroundImage = drawingBitmap;
+            }
         }
 
         private void SnipViewer_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                isDragging = true;
-                dragStartPoint = new Point(e.X, e.Y);
+                if (ModifierKeys == Keys.Alt)
+                {
+                    isDrawing = true;
+                    previousPoint = e.Location;
+
+                    // Push the current state onto the undo stack
+                    undoStack.Push((Bitmap)drawingBitmap.Clone());
+                }
+                else
+                {
+                    isDragging = true;
+                    dragStartPoint = new Point(e.X, e.Y);
+                }
             }
         }
 
@@ -35,13 +60,29 @@ namespace SnipView
                 newLocation.Y += e.Y - dragStartPoint.Y;
                 this.Location = newLocation;
             }
+            else if (isDrawing)
+            {
+                if (drawingGraphics != null)
+                {
+                    drawingGraphics.DrawLine(Pens.Red, previousPoint, e.Location);
+                    previousPoint = e.Location;
+                    this.Invalidate(); // Refresh the form to show the drawing
+                }
+            }
         }
 
         private void SnipViewer_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                isDragging = false;
+                if (isDrawing)
+                {
+                    isDrawing = false;
+                }
+                else
+                {
+                    isDragging = false;
+                }
             }
         }
 
@@ -74,7 +115,6 @@ namespace SnipView
             else if (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.X))
             {
                 Clipboard.SetImage(BackgroundImage!);
-
                 Close();
             }
             else if (e.Control && e.KeyCode == Keys.S)
@@ -97,11 +137,24 @@ namespace SnipView
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
                         BackgroundImage!.Save(fileDialog.FileName);
-
                         Close();
                     }
                 }
-                  
+            }
+            else if (e.Control && e.KeyCode == Keys.Z)
+            {
+                UndoLastAction();
+            }
+        }
+
+        private void UndoLastAction()
+        {
+            if (undoStack.Count > 0)
+            {
+                drawingBitmap = undoStack.Pop();
+                drawingGraphics = Graphics.FromImage(drawingBitmap);
+                BackgroundImage = drawingBitmap;
+                Invalidate(); // Refresh the form to show the restored state
             }
         }
 

@@ -35,7 +35,10 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(234, 114);
+            DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.None;
             Name = "SnipViewer";
+            StartPosition = FormStartPosition.Manual;
             Text = "SnipViewer";
             TopMost = true;
             Load += SnipViewer_Load;
