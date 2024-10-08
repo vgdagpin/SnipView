@@ -33,9 +33,10 @@
             notifyIcon1 = new NotifyIcon(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
             snipsManagerToolStripMenuItem = new ToolStripMenuItem();
+            closeAllToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
-            closeAllToolStripMenuItem = new ToolStripMenuItem();
+            saveAllToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -45,18 +46,29 @@
             notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
             notifyIcon1.Text = "SnipView";
             notifyIcon1.Visible = true;
+            notifyIcon1.DoubleClick += notifyIcon1_DoubleClick;
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { snipsManagerToolStripMenuItem, closeAllToolStripMenuItem, toolStripSeparator1, exitToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { snipsManagerToolStripMenuItem, saveAllToolStripMenuItem, closeAllToolStripMenuItem, toolStripSeparator1, exitToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 98);
+            contextMenuStrip1.Size = new Size(181, 120);
             // 
             // snipsManagerToolStripMenuItem
             // 
+            snipsManagerToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             snipsManagerToolStripMenuItem.Name = "snipsManagerToolStripMenuItem";
             snipsManagerToolStripMenuItem.Size = new Size(180, 22);
             snipsManagerToolStripMenuItem.Text = "Snips Manager";
+            snipsManagerToolStripMenuItem.Click += snipsManagerToolStripMenuItem_Click;
+            // 
+            // closeAllToolStripMenuItem
+            // 
+            closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
+            closeAllToolStripMenuItem.Size = new Size(180, 22);
+            closeAllToolStripMenuItem.Text = "Close All";
+            closeAllToolStripMenuItem.Visible = false;
+            closeAllToolStripMenuItem.Click += closeAllToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
@@ -70,12 +82,13 @@
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
-            // closeAllToolStripMenuItem
+            // saveAllToolStripMenuItem
             // 
-            closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
-            closeAllToolStripMenuItem.Size = new Size(180, 22);
-            closeAllToolStripMenuItem.Text = "Close All";
-            closeAllToolStripMenuItem.Click += closeAllToolStripMenuItem_Click;
+            saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
+            saveAllToolStripMenuItem.Size = new Size(180, 22);
+            saveAllToolStripMenuItem.Text = "Save All";
+            saveAllToolStripMenuItem.Visible = false;
+            saveAllToolStripMenuItem.Click += saveAllToolStripMenuItem_Click;
             // 
             // Main
             // 
@@ -100,5 +113,6 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem snipsManagerToolStripMenuItem;
         private ToolStripMenuItem closeAllToolStripMenuItem;
+        private ToolStripMenuItem saveAllToolStripMenuItem;
     }
 }

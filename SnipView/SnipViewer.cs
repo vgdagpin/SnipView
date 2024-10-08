@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace SnipView
 {
@@ -124,23 +125,16 @@ namespace SnipView
             else if (e.Control && e.KeyCode == Keys.S)
             {
                 using (var fileDialog = new SaveFileDialog())
-                {
-                    var defaultDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Snips");
-
-                    if (!Directory.Exists(defaultDir))
-                    {
-                        Directory.CreateDirectory(defaultDir);
-                    }
-
+                {                    
                     fileDialog.AddExtension = true;
                     fileDialog.FileName = "Snip-" + DateTime.Now.ToString("yyyyMMddHHmmss");
                     fileDialog.DefaultExt = "png";
                     fileDialog.Filter = "PNG Image|*.png";
-                    fileDialog.InitialDirectory = defaultDir;
+                    fileDialog.InitialDirectory = Main.DefaultDirectory;
 
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        BackgroundImage!.Save(fileDialog.FileName);
+                        Save(fileDialog.FileName);
                         Close();
                     }
                 }
@@ -149,6 +143,65 @@ namespace SnipView
             {
                 UndoLastAction();
             }
+        }
+
+        public void Save(string? name = null, string? group = null)
+        {
+            var tempName = "Snip-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
+
+            if (!string.IsNullOrWhiteSpace(group))
+            {
+                tempName = Path.Combine(group, tempName);
+            }
+
+            if (name == null)
+            {
+                name = Path.Combine(Main.DefaultDirectory, tempName);
+            }
+
+            CreateDirectoryIfNotExists(name);
+
+            name = TryGetAvailableFilename(name);
+
+            BackgroundImage!.Save(name);
+
+            Close();
+        }
+
+        private void CreateDirectoryIfNotExists(string filePath)
+        {
+            var path = Path.GetDirectoryName(filePath);
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path!);
+            }
+        }
+
+        private string TryGetAvailableFilename(string filePath, int? increment = null)
+        {
+            if (!File.Exists(filePath))
+            {
+                return filePath;
+            }
+
+            var inc = (increment ?? 0) + 1;
+            var ext = Path.GetExtension(filePath);
+            var path = Path.GetDirectoryName(filePath);
+            var fn = GetFileNameWithoutIncrement(Path.GetFileNameWithoutExtension(filePath));
+            var newFileName = Path.Combine(path!, fn + "_" + inc + ext);
+
+            return TryGetAvailableFilename(newFileName, inc);
+        }
+
+        private string GetFileNameWithoutIncrement(string fileName)
+        {
+            if (fileName.Contains('_'))
+            {
+                fileName = fileName.Substring(0, fileName.LastIndexOf('_'));
+            }
+
+            return fileName;
         }
 
         private void UndoLastAction()

@@ -29,12 +29,36 @@ namespace SnipView
 
         private List<SnipViewer> OpenedSnips = new List<SnipViewer>();
 
+        private static string? defaultDirectory;
+        public static string DefaultDirectory
+        {
+            get
+            {
+                if (defaultDirectory == null)
+                {
+                    var defaultDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Snips");
+
+                    if (!Directory.Exists(defaultDir))
+                    {
+                        Directory.CreateDirectory(defaultDir);
+                    }
+
+                    defaultDirectory = defaultDir;
+                }
+
+                return defaultDirectory;
+            }
+        }
+
         private void ScreenshotPreview_OnSnipClosed(object? sender, SnipViewer e)
         {
             OpenedSnips.Remove(e);
 
             closeAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
+            saveAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
+
             closeAllToolStripMenuItem.Text = $"Close All ({OpenedSnips.Count})";
+            saveAllToolStripMenuItem.Text = $"Save All ({OpenedSnips.Count})";
         }
 
         private void ScreenshotPreview_OnSnipCaptured(object? sender, SnipViewer e)
@@ -42,7 +66,10 @@ namespace SnipView
             OpenedSnips.Add(e);
 
             closeAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
+            saveAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
+
             closeAllToolStripMenuItem.Text = $"Close All ({OpenedSnips.Count})";
+            saveAllToolStripMenuItem.Text = $"Save All ({OpenedSnips.Count})";
         }
 
         public Main()
@@ -92,6 +119,26 @@ namespace SnipView
             foreach (var item in temp)
             {
                 item.Close();
+            }
+        }
+
+        private void snipsManagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new SnipsManager().Show();
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            new SnipsManager().Show();
+        }
+
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var temp = OpenedSnips.ToArray();
+
+            foreach (var item in temp)
+            {
+                item.Save(group: DateTime.Now.ToString("yyyy-dd-MM HHmmss"));
             }
         }
     }
