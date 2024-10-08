@@ -129,7 +129,7 @@ namespace SnipView
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
-            new SnipsManager().Show();
+            ScreenshotPreview.Show();
         }
 
         private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -140,6 +140,11 @@ namespace SnipView
             {
                 item.Save(group: DateTime.Now.ToString("yyyy-dd-MM HHmmss"));
             }
+        }
+
+        private void snipToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScreenshotPreview.Show();
         }
     }
 }
