@@ -6,11 +6,27 @@
         private Rectangle selectionRectangle;
         private bool isSelecting;
 
-        public SnippingToolForm()
+        protected ScreenshotPreview ScreenshotPreview { get; private set; }
+
+        public event EventHandler<SnipViewer>? OnSnipCaptured;
+        public event EventHandler<SnipViewer>? OnSnipClosed;
+
+        public SnippingToolForm(ScreenshotPreview screenshotPreview)
         {
+            ScreenshotPreview = screenshotPreview;
+
             InitializeComponent();
 
             Bounds = SystemInformation.VirtualScreen;
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+                ScreenshotPreview.Close();
+            }
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -42,8 +58,9 @@
             if (e.Button == MouseButtons.Left)
             {
                 isSelecting = false;
-                this.Close();
+                Close();
                 CaptureScreenshot();
+                ScreenshotPreview.Close();
             }
         }
 
@@ -74,9 +91,27 @@
                         BackgroundImage = (Image)bitmap.Clone()
                     };
 
+                    vwr.FormClosed += (sender, e) =>
+                    {
+                        OnSnipClosed?.Invoke(sender,(SnipViewer)sender!);
+                    };
+
                     vwr.Show();
+
+                    OnSnipCaptured?.Invoke(this, vwr);
                 }
             }
+        }
+
+        private void tmrOpacity_Tick(object sender, EventArgs e)
+        {
+            if (Opacity >= 0.3D)
+            {
+                Cursor = Cursors.Cross;
+                tmrOpacity.Enabled = false;
+            }
+
+            Opacity += 0.1D;
         }
     }
 }

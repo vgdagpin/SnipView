@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 
 namespace SnipView
 {
@@ -15,7 +16,9 @@ namespace SnipView
 
         public SnipViewer()
         {
-            InitializeComponent();          
+            InitializeComponent();
+
+            Text = DateTime.Now.ToString("hh:mm:ss tt");
         }
 
         private void SnipViewer_Load(object sender, EventArgs e)
@@ -26,6 +29,7 @@ namespace SnipView
             {
                 drawingBitmap = new Bitmap(BackgroundImage);
                 drawingGraphics = Graphics.FromImage(drawingBitmap);
+                drawingGraphics.SmoothingMode = SmoothingMode.AntiAlias;
 
                 BackgroundImage = drawingBitmap;
             }
@@ -156,6 +160,17 @@ namespace SnipView
                 BackgroundImage = drawingBitmap;
                 Invalidate(); // Refresh the form to show the restored state
             }
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetImage(BackgroundImage!);
+            Close();
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private struct MARGINS
