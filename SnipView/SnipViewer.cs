@@ -15,6 +15,8 @@ namespace SnipView
 
         private Stack<Bitmap> undoStack = new Stack<Bitmap>();
 
+        protected Pen? Pen { get; set; }
+
         public SnipViewer()
         {
             InitializeComponent();
@@ -42,6 +44,7 @@ namespace SnipView
             {
                 if (ModifierKeys == Keys.Alt)
                 {
+                    Pen = GetPen();
                     isDrawing = true;
                     previousPoint = e.Location;
 
@@ -69,11 +72,19 @@ namespace SnipView
             {
                 if (drawingGraphics != null)
                 {
-                    drawingGraphics.DrawLine(Pens.Red, previousPoint, e.Location);
-                    previousPoint = e.Location;
-                    this.Invalidate(); // Refresh the form to show the drawing
+                    if (Pen != null)
+                    {
+                        drawingGraphics.DrawLine(Pen, previousPoint, e.Location);
+                        previousPoint = e.Location;
+                        this.Invalidate(); // Refresh the form to show the drawing
+                    }                    
                 }
             }
+        }
+
+        protected Pen GetPen()
+        {
+            return new Pen(Color.FromArgb(130, 255, 230, 0), 12);
         }
 
         private void SnipViewer_MouseUp(object sender, MouseEventArgs e)
@@ -82,6 +93,12 @@ namespace SnipView
             {
                 if (isDrawing)
                 {
+                    if (Pen != null)
+                    {
+                        Pen.Dispose();
+                        Pen = null;
+                    }
+
                     isDrawing = false;
                 }
                 else
