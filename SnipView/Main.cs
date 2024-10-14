@@ -20,7 +20,6 @@ namespace SnipView
                     screenshotPreview.Bounds = SystemInformation.VirtualScreen;
 
                     screenshotPreview.OnSnipCaptured += ScreenshotPreview_OnSnipCaptured;
-                    screenshotPreview.OnSnipClosed += ScreenshotPreview_OnSnipClosed;
                 }
 
                 return screenshotPreview;
@@ -50,26 +49,40 @@ namespace SnipView
             }
         }
 
-        private void ScreenshotPreview_OnSnipClosed(object? sender, SnipViewer e)
+        private void ScreenshotPreview_OnSnipCaptured(object? sender, Snip e)
         {
-            OpenedSnips.Remove(e);
+            var vwr = new SnipViewer
+            {
+                Tag = e.ID,
+                Size = e.Size,
+                Location = e.Location,
+                BackgroundImage = e.Image
+            };
+
+            vwr.FormClosed += (vwrSender, e) =>
+            {
+                var v = OpenedSnips.Single(a => a.Tag == ((SnipViewer)vwrSender!).Tag);
+
+                OpenedSnips.Remove(v);
+
+                closeAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
+                saveAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
+
+                closeAllToolStripMenuItem.Text = $"Close All ({OpenedSnips.Count})";
+                saveAllToolStripMenuItem.Text = $"Save All ({OpenedSnips.Count})";
+            };
+
+            OpenedSnips.Add(vwr);
 
             closeAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
             saveAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
 
             closeAllToolStripMenuItem.Text = $"Close All ({OpenedSnips.Count})";
             saveAllToolStripMenuItem.Text = $"Save All ({OpenedSnips.Count})";
-        }
 
-        private void ScreenshotPreview_OnSnipCaptured(object? sender, SnipViewer e)
-        {
-            OpenedSnips.Add(e);
+            Clipboard.SetImage(e.Image);
 
-            closeAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
-            saveAllToolStripMenuItem.Visible = OpenedSnips.Count > 0;
-
-            closeAllToolStripMenuItem.Text = $"Close All ({OpenedSnips.Count})";
-            saveAllToolStripMenuItem.Text = $"Save All ({OpenedSnips.Count})";
+            vwr.Show();
         }
 
         public Main()

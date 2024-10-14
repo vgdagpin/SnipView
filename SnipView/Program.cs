@@ -2,16 +2,23 @@ namespace SnipView
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
+        static readonly string AppName = "SnipViewProgram";
+
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new Main());
+            using (var mutex = new Mutex(false, AppName, out bool createdNew))
+            {
+                if (!createdNew)
+                {
+                    MessageBox.Show("Another instance of the application is already running.", "SnipView", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    return;
+                }
+
+                ApplicationConfiguration.Initialize();
+                Application.Run(new Main());
+            }
         }
     }
 }

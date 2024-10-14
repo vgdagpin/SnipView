@@ -32,12 +32,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             notifyIcon1 = new NotifyIcon(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
+            snipToolStripMenuItem = new ToolStripMenuItem();
             snipsManagerToolStripMenuItem = new ToolStripMenuItem();
             saveAllToolStripMenuItem = new ToolStripMenuItem();
             closeAllToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
-            snipToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -53,20 +53,29 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { snipToolStripMenuItem, snipsManagerToolStripMenuItem, saveAllToolStripMenuItem, closeAllToolStripMenuItem, toolStripSeparator1, exitToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 142);
+            contextMenuStrip1.Size = new Size(178, 120);
+            // 
+            // snipToolStripMenuItem
+            // 
+            snipToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            snipToolStripMenuItem.Name = "snipToolStripMenuItem";
+            snipToolStripMenuItem.ShortcutKeyDisplayString = "Win+Shift+Z";
+            snipToolStripMenuItem.Size = new Size(177, 22);
+            snipToolStripMenuItem.Text = "Snip";
+            snipToolStripMenuItem.Click += snipToolStripMenuItem_Click;
             // 
             // snipsManagerToolStripMenuItem
             // 
             snipsManagerToolStripMenuItem.Font = new Font("Segoe UI", 9F);
             snipsManagerToolStripMenuItem.Name = "snipsManagerToolStripMenuItem";
-            snipsManagerToolStripMenuItem.Size = new Size(180, 22);
+            snipsManagerToolStripMenuItem.Size = new Size(177, 22);
             snipsManagerToolStripMenuItem.Text = "Snips Manager";
             snipsManagerToolStripMenuItem.Click += snipsManagerToolStripMenuItem_Click;
             // 
             // saveAllToolStripMenuItem
             // 
             saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
-            saveAllToolStripMenuItem.Size = new Size(180, 22);
+            saveAllToolStripMenuItem.Size = new Size(177, 22);
             saveAllToolStripMenuItem.Text = "Save All";
             saveAllToolStripMenuItem.Visible = false;
             saveAllToolStripMenuItem.Click += saveAllToolStripMenuItem_Click;
@@ -74,7 +83,7 @@
             // closeAllToolStripMenuItem
             // 
             closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
-            closeAllToolStripMenuItem.Size = new Size(180, 22);
+            closeAllToolStripMenuItem.Size = new Size(177, 22);
             closeAllToolStripMenuItem.Text = "Close All";
             closeAllToolStripMenuItem.Visible = false;
             closeAllToolStripMenuItem.Click += closeAllToolStripMenuItem_Click;
@@ -82,23 +91,14 @@
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(174, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
+            exitToolStripMenuItem.Size = new Size(177, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
-            // 
-            // snipToolStripMenuItem
-            // 
-            snipToolStripMenuItem.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            snipToolStripMenuItem.Name = "snipToolStripMenuItem";
-            snipToolStripMenuItem.ShortcutKeyDisplayString = "Win+Shift+Z";
-            snipToolStripMenuItem.Size = new Size(180, 22);
-            snipToolStripMenuItem.Text = "Snip";
-            snipToolStripMenuItem.Click += snipToolStripMenuItem_Click;
             // 
             // Main
             // 
@@ -106,6 +106,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(289, 209);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Main";
             ShowIcon = false;
             ShowInTaskbar = false;

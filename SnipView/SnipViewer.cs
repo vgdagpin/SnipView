@@ -117,31 +117,40 @@ namespace SnipView
             {
                 Close();
             }
-            else if (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.X))
+            else if (e.Control && (e.KeyCode == Keys.C))
+            {
+                Clipboard.SetImage(BackgroundImage!);
+            }
+            else if (e.Control && (e.KeyCode == Keys.X))
             {
                 Clipboard.SetImage(BackgroundImage!);
                 Close();
             }
             else if (e.Control && e.KeyCode == Keys.S)
             {
-                using (var fileDialog = new SaveFileDialog())
-                {                    
-                    fileDialog.AddExtension = true;
-                    fileDialog.FileName = "Snip-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                    fileDialog.DefaultExt = "png";
-                    fileDialog.Filter = "PNG Image|*.png";
-                    fileDialog.InitialDirectory = Main.DefaultDirectory;
-
-                    if (fileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        Save(fileDialog.FileName);
-                        Close();
-                    }
-                }
+                SaveDialog();
             }
             else if (e.Control && e.KeyCode == Keys.Z)
             {
                 UndoLastAction();
+            }
+        }
+
+        private void SaveDialog()
+        {
+            using (var fileDialog = new SaveFileDialog())
+            {
+                fileDialog.AddExtension = true;
+                fileDialog.FileName = "Snip-" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                fileDialog.DefaultExt = "png";
+                fileDialog.Filter = "PNG Image|*.png";
+                fileDialog.InitialDirectory = Main.DefaultDirectory;
+
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    Save(fileDialog.FileName);
+                    Close();
+                }
             }
         }
 
@@ -224,6 +233,11 @@ namespace SnipView
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveDialog();
         }
 
         private struct MARGINS

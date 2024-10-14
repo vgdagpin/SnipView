@@ -1,4 +1,6 @@
-﻿namespace SnipView
+﻿using System.Drawing;
+
+namespace SnipView
 {
     public partial class SnippingToolForm : Form
     {
@@ -8,8 +10,7 @@
 
         protected ScreenshotPreview ScreenshotPreview { get; private set; }
 
-        public event EventHandler<SnipViewer>? OnSnipCaptured;
-        public event EventHandler<SnipViewer>? OnSnipClosed;
+        public event EventHandler<Snip>? OnSnipCaptured;
 
         public SnippingToolForm(ScreenshotPreview screenshotPreview)
         {
@@ -79,27 +80,23 @@
         {
             if (selectionRectangle.Width > 0 && selectionRectangle.Height > 0)
             {
+                Snip snip;
+
                 using (Bitmap bitmap = new Bitmap(selectionRectangle.Width, selectionRectangle.Height))
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
                     g.CopyFromScreen(selectionRectangle.Location, Point.Empty, selectionRectangle.Size);
 
-                    var vwr = new SnipViewer
+                    snip = new Snip
                     {
+                        ID = Guid.NewGuid(),
                         Size = selectionRectangle.Size,
                         Location = selectionRectangle.Location,
-                        BackgroundImage = (Image)bitmap.Clone()
-                    };
-
-                    vwr.FormClosed += (sender, e) =>
-                    {
-                        OnSnipClosed?.Invoke(sender,(SnipViewer)sender!);
-                    };
-
-                    vwr.Show();
-
-                    OnSnipCaptured?.Invoke(this, vwr);
+                        Image = (Image)bitmap.Clone()
+                    };                    
                 }
+
+                OnSnipCaptured?.Invoke(this, snip);
             }
         }
 

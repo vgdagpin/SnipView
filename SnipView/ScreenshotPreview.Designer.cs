@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScreenshotPreview));
             SuspendLayout();
             // 
             // ScreenshotPreview
@@ -37,6 +38,7 @@
             ClientSize = new Size(430, 279);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ScreenshotPreview";
             Text = "ScreenshotPreview";
             TopMost = true;

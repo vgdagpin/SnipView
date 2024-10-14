@@ -2,8 +2,7 @@
 {
     public partial class ScreenshotPreview : Form
     {
-        public event EventHandler<SnipViewer>? OnSnipCaptured;
-        public event EventHandler<SnipViewer>? OnSnipClosed;
+        public event EventHandler<Snip>? OnSnipCaptured;
 
 
         private Bitmap? screenshotBitmap;
@@ -49,7 +48,6 @@
             var snipTool = new SnippingToolForm(this);
 
             snipTool.OnSnipCaptured += OnSnipCaptured;
-            snipTool.OnSnipClosed += OnSnipClosed;
 
             snipTool.Show();
         }
