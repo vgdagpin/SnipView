@@ -11,14 +11,13 @@ namespace SnipView
         protected ScreenshotPreview ScreenshotPreview { get; private set; }
 
         public event EventHandler<Snip>? OnSnipCaptured;
+        public event EventHandler? OnClosePreview;
 
         public SnippingToolForm(ScreenshotPreview screenshotPreview)
         {
             ScreenshotPreview = screenshotPreview;
 
             InitializeComponent();
-
-            Bounds = SystemInformation.VirtualScreen;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -26,7 +25,7 @@ namespace SnipView
             if (e.KeyCode == Keys.Escape)
             {
                 Close();
-                ScreenshotPreview.Close();
+                OnClosePreview?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -61,7 +60,7 @@ namespace SnipView
                 isSelecting = false;
                 Close();
                 CaptureScreenshot();
-                ScreenshotPreview.Close();
+                OnClosePreview?.Invoke(this, EventArgs.Empty);
             }
         }
 

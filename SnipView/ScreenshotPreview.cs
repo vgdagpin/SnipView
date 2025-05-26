@@ -45,9 +45,13 @@
 
             Visible = true;
 
-            var snipTool = new SnippingToolForm(this);
+            var snipTool = new SnippingToolForm(this)
+            {
+                Bounds = Bounds
+            };
 
             snipTool.OnSnipCaptured += OnSnipCaptured;
+            snipTool.OnClosePreview += (sender, e) => Close();
 
             snipTool.Show();
         }

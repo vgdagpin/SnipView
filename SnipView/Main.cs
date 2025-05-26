@@ -17,9 +17,14 @@ namespace SnipView
                 if (screenshotPreview == null)
                 {
                     screenshotPreview = new ScreenshotPreview();
-                    screenshotPreview.Bounds = SystemInformation.VirtualScreen;
 
                     screenshotPreview.OnSnipCaptured += ScreenshotPreview_OnSnipCaptured;
+                }
+
+                if (screenshotPreview.Bounds.Width != SystemInformation.VirtualScreen.Width
+                    || screenshotPreview.Bounds.Height != SystemInformation.VirtualScreen.Height)
+                {
+                    screenshotPreview.Bounds = SystemInformation.VirtualScreen;
                 }
 
                 return screenshotPreview;
